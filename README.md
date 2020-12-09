@@ -1,4 +1,4 @@
-# Installation for 3D-City-DB & Importer-Exporter
+# Install 3D-City-DB & Importer-Exporter
 
 Before you start, you may skim through the [first step of the official 3D City DB document](https://3dcitydb-docs.readthedocs.io/en/release-v4.2.3/intro/index.html). The entire section is about installation and preparation. 
 
@@ -235,4 +235,44 @@ If you still have the problem, you may try the full instruction from the first a
 ### Visualize
 
 
-## PostgreSQL Storage Problem in root dir
+## PostgreSQL Storage Problem in root dir.
+
+After using the package for a while, you may encounter with `/` is getting full. 
+With large .gml files dataset, you can get `+70GB` very easily. 
+
+To verirfy if PostgreSQL is the cause of the problem, you can check with 
+
+$ sudo apt install baobab
+$ sudo baobab
+
+You may look for `/var/lib/postgresql/12/main`... and see if the lumpsum storage is owned by this directory. 
+
+If the answer is YES, then there are two approaches to address the problem:
+
+- Use VACUMM to delete files in `/var/lib/postgresql/12/main`... 
+- Move the data directory from  `/var/lib/postgresql/12/main` to other place. << I think this one is less riskly.  
+
+I have used my home directory to store the file generated from PostgreSQL such as`/home/user-gabby`.
+
+The steps are ...
+ 
+- **Step 1.** Verfiy if `data_directory`  of PostgreSQL points to `/var/lib/postgresql/12/main`:
+```
+$ sudo su - postgres
+postgres=#SHOW data_directory;
+```
+If you get the following results, then the answer is YES.
+```
+Output
+       data_directory       
+------------------------------
+/var/lib/postgresql/12/main
+(1 row)
+```
+Once you’ve confirmed the directory on your system, type `\q` abd then `exit` to quit.
+
+- **Step 2.** Shut down PostgreSQL before we actually make changes to the data directory.
+
+
+
+ ### 
