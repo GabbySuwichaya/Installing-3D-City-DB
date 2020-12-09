@@ -23,7 +23,9 @@ Before you do anything, you should notice the following
 
 My initial setting is Ubuntu 20.04.  
 
-### 1. Install `Java runtime environment`. I have installed JDK 14 following the [installation-java-on-ubuntu-20-04](https://linuxconfig.org/how-to-install-java-on-ubuntu-20-04-lts-focal-fossa-linux) . 
+### 1. Install `Java runtime environment`. 
+
+I have installed JDK 14 following the [installation-java-on-ubuntu-20-04](https://linuxconfig.org/how-to-install-java-on-ubuntu-20-04-lts-focal-fossa-linux) . 
 
 To see which package is available for your Ubuntu. 
 ```
