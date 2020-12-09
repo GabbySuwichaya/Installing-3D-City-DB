@@ -23,7 +23,7 @@ Before you do anything, you should notice the following
 
 My initial setting is Ubuntu 20.04.  
 
-1. Install `Java runtime environment`. I have installed JDK 14 following the [installation-java-on-ubuntu-20-04](https://linuxconfig.org/how-to-install-java-on-ubuntu-20-04-lts-focal-fossa-linux) . 
+### 1. Install `Java runtime environment`. I have installed JDK 14 following the [installation-java-on-ubuntu-20-04](https://linuxconfig.org/how-to-install-java-on-ubuntu-20-04-lts-focal-fossa-linux) . 
 
 To see which package is available for your Ubuntu. 
 ```
@@ -35,9 +35,187 @@ $ sudo apt install openjdk-14-jdk
 ```
 Then, you can check the installation with `$ java --version`
 
-2. Install `PostgreSQL`. 
+### 2. Install `PostgreSQL`. 
 
+   - **Step 1:** Update the system. A reboot is necessary after an upgrade.
+```
+sudo apt update
+sudo apt -y upgrade 
+sudo reboot
+```
+   - **Step 2:** Add PostgreSQL repository. We need to import GPG key and add PostgreSQL 12 repository into our Ubuntu machine. 
+```
+sudo apt -y install gnupg2
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+```
+After importing GPG key, add repository contents to your Ubuntu:
 
+```
+echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+```
+   - **Step 3:** Install PostgreSQL 12 on Ubuntu 20.04/18.04/16.04 LTS.
+```
+sudo apt update
+sudo apt -y install postgresql-12 postgresql-client-12
+```
+The PostgreSQL service is started and set to come up after every system reboot.
+```
+$ systemctl status postgresql.service 
+ ● postgresql.service - PostgreSQL RDBMS
+    Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+    Active: active (exited) since Sun 2019-10-06 10:23:46 UTC; 6min ago
+  Main PID: 8159 (code=exited, status=0/SUCCESS)
+     Tasks: 0 (limit: 2362)
+    CGroup: /system.slice/postgresql.service
+ Oct 06 10:23:46 ubuntu18 systemd[1]: Starting PostgreSQL RDBMS…
+ Oct 06 10:23:46 ubuntu18 systemd[1]: Started PostgreSQL RDBMS.
+
+$ systemctl status postgresql@12-main.service 
+ ● postgresql@12-main.service - PostgreSQL Cluster 12-main
+    Loaded: loaded (/lib/systemd/system/postgresql@.service; indirect; vendor preset: enabled)
+    Active: active (running) since Sun 2019-10-06 10:23:49 UTC; 5min ago
+  Main PID: 9242 (postgres)
+     Tasks: 7 (limit: 2362)
+    CGroup: /system.slice/system-postgresql.slice/postgresql@12-main.service
+            ├─9242 /usr/lib/postgresql/12/bin/postgres -D /var/lib/postgresql/12/main -c config_file=/etc/postgresql/12/main/postgresql.conf
+            ├─9254 postgres: 12/main: checkpointer   
+            ├─9255 postgres: 12/main: background writer   
+            ├─9256 postgres: 12/main: walwriter   
+            ├─9257 postgres: 12/main: autovacuum launcher   
+            ├─9258 postgres: 12/main: stats collector   
+            └─9259 postgres: 12/main: logical replication launcher   
+ Oct 06 10:23:47 ubuntu18 systemd[1]: Starting PostgreSQL Cluster 12-main…
+ Oct 06 10:23:49 ubuntu18 systemd[1]: Started PostgreSQL Cluster 12-main.
+
+$ systemctl is-enabled postgresql
+enabled   
+```
+   - **Step 4:** Test PostgreSQL Connection.
+   
+During installation, a postgres user is created automatically. This user has full superadmin access to your entire PostgreSQL instance. Before you switch to this account, your logged in system user should have sudo privileges.
+```
+$ sudo su - postgres
+```
+
+You should reset password. Pick a password and you need to **remember** it. 
+**You will need it with _3D City DB_ and _pgAdmin 4_.**  
+```
+$ psql -c "alter user postgres with password 'StrongAdminP@ssw0rd'"
+```
+For example, `$ psql -c "alter user postgres with password 'GabbyP@ssw0rd'"`
+
+Start PostgreSQL prompt by using the command:
+```
+$ psql
+```
+You can try creating database 
+```
+$ psql
+psql (12.0 (Ubuntu 12.0-1.pgdg18.04+1))
+Type "help" for help.
+
+postgres=# \conninfo
+You are connected to database "postgres" as user "postgres" via socket in "/var/run/postgresql" at port "5432".
+
+postgres=# CREATE DATABASE mytestdb;
+CREATE DATABASE
+
+postgres=# \l
+```
+
+### 3. Install `PostGIS`. 
+
+**Step 1:** Install `postgis`. Make sure to select the `Postgis` that match with `PostgreSQL`. With PostgreSQL 12, I have to install `Postgis`  with the following command:
+```
+sudo apt install postgis postgresql-12-postgis-3
+```
+**Step 2:** Enable PostGIS on Ubuntu 20.04/18.04
+
+```
+sudo -i -u postgres
+```
+### 4. Install `pgAdmin 4` (optional). 
+
+This is only optional. This tool may be useful for checking the created database. 
+
+Load the repo...
+```
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+```
+
+Install  `pgAdmin 4` ...  
+
+```
+sudo apt update
+sudo apt install pgadmin4 pgadmin4-apache2
+
+```
+During installation, you’re asked to configure initial user account and password . 
+The previous one that you have set. For example ... 
+
+```
+user: postgres
+pass: GabbyP@ssw0rd
+```
+
+After the isntallation is finished, `pgAdmin 4` is activated with...
+
+```
+$ pgadmin4
+```
+
+How to use `pgAdmin4` is provided in https://computingforgeeks.com/how-to-install-pgadmin-4-on-ubuntu/.
+
+#### Possilbe errors
+
+Before I can run `$ pgadmin4`, I get errors related to `apache2`. 
+
+You can verify this by using the following command. 
+```
+$ systemctl status apache2
+```
+If you cannot Start Apache2 (by getting the error `AH00072: make_sock: could not bind to address [::]:80`) similar to 
+https://askubuntu.com/questions/1145403/cannot-start-apache2... 
+
+The you may use the following steps to solve the problem. 
+
+- **The 1st problem.**  The port 80 was used for Internet connections in my computer...
+You can verify this by 
+```
+sudo lsof -i TCP:80
+```
+Therefore I have to change the port number from 80 to other number. (Here I choose 3000 instead)
+You need to change the following files:
+```
+/etc/apache2/ports.conf 
+/etc/apache2/sites-enabled/000-default.conf 
+```
+For example,  you can use `nano` to change the port number:  
+```
+sudo nano /etc/apache2/ports.conf 
+```
+Replace `80` with `3000`. Then, save changes with `Ctrl + O` and click `Enter`. Then, exit with `Ctrl + X`   
+
+- **The 2nd problem.**  If you still see the warning that `Apache could not reliably determine server`
+https://askubuntu.com/questions/256013/apache-error-could-not-reliably-determine-the-servers-fully-qualified-domain-n  
+
+Then, this can be fixed by adding a phrase`ServerName localhost` into the last line of `/etc/apache2/apache2.conf`.
+```
+sudo nano /etc/apache2/apache2.conf
+```
+Then go to the last line and type 
+```
+ServerName localhost
+```
+Then, save changes with `Ctrl + O` and click `Enter`. Then, exit with `Ctrl + X`.
+
+And then restart apache by typing into the terminal:
+
+```
+sudo systemctl reload apache2
+```
+If you still have the problem, you may try the full instruction from the first answer (with about 575 likes.).   
 
 ## Quick-Start.
 
