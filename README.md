@@ -295,7 +295,7 @@ http://www.3dcitydb.org/3dcitydb/fileadmin/TUM_Workshop/Documents/Tutorial.pdf
 ## PostgreSQL Storage Problem in root dir.
 
 After using the package for a while, you may encounter with `/` is getting full. 
-With large .gml files dataset, you can get `+70GB` very easily. 
+With large .gml files dataset, you can get `+10GB` very easily. 
 
 To verirfy if PostgreSQL is the cause of the problem, you can check with 
 
