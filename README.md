@@ -329,4 +329,67 @@ Output
 Once you’ve confirmed the directory on your system, type `\q` abd then `exit` to quit.
 
 - **Step 2.** Shut down PostgreSQL before we actually make changes to the data directory.
+
+```
+sudo systemctl stop postgresql
+```
+To confirm that you have shutdown, run `sudo systemctl status postgresql`. You should see the final line ending with `...Stopped PostgreSQL RDBMS.`
+
+
+Create a destination folder to be used as `data_directory`. Make sure that your destination folder is placed in a large storage drive.
+I choose to create the new drive in my home directory.
+```
+~: $ mkdir my-postgresql-volume
+```
+Then, move the current data folder to your desination folder:
+```
+$ sudo rsync -av /var/lib/postgresql /home/usr/my-postgresql-volume
+```
+ Then, create a backup 
+ ```
+ sudo mv /var/lib/postgresql/12/main /var/lib/postgresql/12/main.bak
+ ```
+ - **Step 3** Point to new location (your desination folder).  
  
+ By default, the data_directory is set to `/var/lib/postgresql/12/main` in the `/etc/postgresql/12/main/postgresql.conf` file. Edit this file to point to the new data directory:
+ ```
+ sudo nano /etc/postgresql/12/main/postgresql.conf
+ ```
+Edit the directory of `data_directory`  as follows.... 
+```
+#####################################################
+       /etc/postgresql/12/main/postgresql.conf
+#####################################################
+. . .
+data_directory = '/home/usr/my-postgresql-volume/12/main'
+. . .
+ ```
+ - **Step 4** Restart PostgreSQL  and check if everything works propertly .... 
+```
+sudo systemctl start postgresql
+sudo systemctl status postgresql
+```
+Then, you can check by accessing `psql`
+```
+sudo -su postgres
+psql
+```
+
+Then, check `the data_directory`:
+
+```
+postgres=#SHOW data_directory;
+```
+
+If the data directory has pointed to `/home/usr/my-postgresql-volume/12/main`, then you can remove 
+```
+sudo rm -Rf /var/lib/postgresql/12/main.bak
+```
+And restart.... 
+```
+sudo systemctl restart postgresql
+sudo systemctl status postgresql
+```
+The end. 
+
+Ref: https://www.digitalocean.com/community/tutorials/how-to-move-a-postgresql-data-directory-to-a-new-location-on-ubuntu-16-04
