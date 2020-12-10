@@ -265,7 +265,10 @@ http://www.3dcitydb.org/3dcitydb/fileadmin/TUM_Workshop/Documents/Tutorial.pdf
 
 ### Import/Export 
 
+
 - You can follow the instruction in http://www.3dcitydb.org/3dcitydb/fileadmin/TUM_Workshop/Documents/Tutorial.pdf
+
+- You can download .gml file used in the tutorial from https://github.com/3dcitydb/importer-exporter/issues/80#issuecomment-476100406 ... 
 
 - If you cannot view Map, you may have to install the more recent version from https://github.com/3dcitydb/importer-exporter by building form source see https://github.com/3dcitydb/importer-exporter#building. You don't need to uninstall the previously installed package (.jar).  
 
