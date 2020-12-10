@@ -224,15 +224,41 @@ If you still have the problem, you may try the full instruction from the first a
 
 ### Settings
 
-### Creat-DATABASE.sh
+#### Install `3D-City-DB Importer/Exporter` (v.4.2.3)
 
-### Database-Connection 
+- Open site https://www.3dcitydb.org/3dcitydb/downloads/ and download `3DCityDB-Importer-Exporter-4.x.x-Setup.jar`. Then, run the .jar with double clicks. I would recommend install all the plugins as you may need them in future. 
 
-### Import 
+#### Creat DATABASE
 
-### Export
+To create the database, you will have to: 
+- (1) Configure the `CONNECTION_DETAILS.sh` in `3DCityDB-Importer-Exporter/3dcitydb/postgresql/ShellScripts/Unix` (if you are using Ubuntu with `postgresql`);
+- (2) Run `CREATE_DB.sh`.  
+- (3) If you have done this before and want to change the SRID and ESPG, you will not be sucessful when running `CREATE_DB.sh`. To solve this problem, you have to run `DROP_DB.sh`. 
 
-### Visualize
+##### Example of `CONNECTION_DETAILS.sh`. 
+
+```
+#!/bin/bash
+# Provide your database details here ------------------------------------------
+export PGBIN=path_to_psql
+export PGHOST=localhost
+export PGPORT=5432
+export CITYDB=CityModelX
+export PGUSER=postgres
+#------------------------------------------------------------------------------
+```
+
+##### How to create another database with different Connection Details using `pgAdmin 4`.
+
+To do this, you can follow the instruction in Exercise 2: 3D City Database Setup. 
+http://www.3dcitydb.org/3dcitydb/fileadmin/TUM_Workshop/Documents/Tutorial.pdf
+
+
+### Import/Export 
+
+- You can follow the instruction in http://www.3dcitydb.org/3dcitydb/fileadmin/TUM_Workshop/Documents/Tutorial.pdf
+
+- If you cannot view Map, you may have to install the more recent version from https://github.com/3dcitydb/importer-exporter by building form source see https://github.com/3dcitydb/importer-exporter#building. You don't need to uninstall the previously installed package (.jar).  
 
 
 ## PostgreSQL Storage Problem in root dir.
