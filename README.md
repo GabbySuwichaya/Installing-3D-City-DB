@@ -1,4 +1,23 @@
-# Install 3D-City-DB & Importer-Exporter
+- [3D-City-DB & Importer-Exporter](#3d-city-db---importer-exporter)
+  * [Prerequisite-Installation](#prerequisite-installation)
+    + [1. Install `Java runtime environment`.](#1-install--java-runtime-environment-)
+    + [2. Install `PostgreSQL`.](#2-install--postgresql-)
+    + [3. Install `PostGIS`.](#3-install--postgis-)
+    + [4. Install `pgAdmin 4` (optional).](#4-install--pgadmin-4---optional-)
+      - [Possilbe errors](#possilbe-errors)
+    + [5. Install `Google Earth Pro` (optional).](#5-install--google-earth-pro---optional-)
+  * [Quick-Start.](#quick-start)
+    + [Settings](#settings)
+      - [Install `3D-City-DB Importer/Exporter` (v.4.2.3)](#install--3d-city-db-importer-exporter---v423-)
+      - [Creat DATABASE](#creat-database)
+        * [Example of `CONNECTION_DETAILS.sh`.](#example-of--connection-detailssh-)
+        * [How to create another database with different Connection Details using `pgAdmin 4`.](#how-to-create-another-database-with-different-connection-details-using--pgadmin-4-)
+    + [Import-Export-visualize](#import-export-visualize)
+  * [PostgreSQL Storage Problem in root dir.](#postgresql-storage-problem-in-root-dir)
+
+_________________________________________________________________________________________________
+
+#  3D-City-DB & Importer-Exporter
 
 Before you start, you may skim through the [first step of the official 3D City DB document](https://3dcitydb-docs.readthedocs.io/en/release-v4.2.3/intro/index.html). The entire section is about installation and preparation. 
 
@@ -263,7 +282,7 @@ To do this, you can follow the instruction in Exercise 2: 3D City Database Setup
 http://www.3dcitydb.org/3dcitydb/fileadmin/TUM_Workshop/Documents/Tutorial.pdf
 
 
-### Import/Export 
+### Import-Export-visualize
 
 
 - You can follow the instruction in http://www.3dcitydb.org/3dcitydb/fileadmin/TUM_Workshop/Documents/Tutorial.pdf
@@ -310,7 +329,4 @@ Output
 Once you’ve confirmed the directory on your system, type `\q` abd then `exit` to quit.
 
 - **Step 2.** Shut down PostgreSQL before we actually make changes to the data directory.
-
-
-
- ### 
+ 
