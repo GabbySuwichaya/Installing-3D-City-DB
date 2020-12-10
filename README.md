@@ -219,6 +219,15 @@ sudo systemctl reload apache2
 ```
 If you still have the problem, you may try the full instruction from the first answer (with about 575 likes.).   
 
+### 5. Install `Google Earth Pro` (optional).
+
+```
+$ wget -O ~/google-earth.deb https://dl.google.com/dl/earth/client/current/google-earth-pro-stable_current_amd64.deb
+$ sudo dpkg -i ~/google-earth.deb
+```
+  
+Ref: https://linuxconfig.org/how-to-install-google-earth-on-ubuntu-20-04-focal-fossa-linux
+
 ## Quick-Start.
 
 
